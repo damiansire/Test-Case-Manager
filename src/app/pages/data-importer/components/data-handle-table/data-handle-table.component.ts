@@ -19,6 +19,7 @@ export class DataHandleTableComponent {
   parsedData: string[][] = [];
   selectedRows: number[] = [];
   newColumnName: string = '';
+  headers = ["testId", "parentId", "Test Type", "Test Title", "Test Priority", "Scope", "Step"]
 
   parseCSV(): void {
     if (!this.selectedDelimiter || !this.selectedLineBreak || !this.fileContent ) return;
