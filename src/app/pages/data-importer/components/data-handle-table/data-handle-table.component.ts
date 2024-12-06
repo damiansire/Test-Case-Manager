@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CsvHandlerService } from '../../../../services/csv-handler';
 
@@ -14,8 +14,8 @@ export class DataHandleTableComponent {
   fileContent = this.csvHandlerService.csvData();
   possibleDelimiters = this.csvHandlerService.possibleDelimiters();
   possibleLineBreaks = this.csvHandlerService.possibleLineBreaks();
-  selectedDelimiter: string = ',';
-  selectedLineBreak: string = '\n';
+  selectedDelimiter = signal(',');
+  selectedLineBreak = signal('\n');
   parsedData: string[][] = [];
   selectedRows: number[] = [];
   newColumnName: string = '';
@@ -34,11 +34,11 @@ export class DataHandleTableComponent {
   }
 
   parseCSV(): void {
-    if (!this.selectedDelimiter || !this.selectedLineBreak || !this.fileContent)
+    if (!this.selectedDelimiter() || !this.selectedLineBreak || !this.fileContent)
       return;
 
-    const rows = this.fileContent.split(this.selectedLineBreak);
-    this.parsedData = rows.map((row) => row.split(this.selectedDelimiter));
+    const rows = this.fileContent.split(this.selectedLineBreak());
+    this.parsedData = rows.map((row) => row.split(this.selectedDelimiter()));
     this.selectedRows = [];
   }
 
