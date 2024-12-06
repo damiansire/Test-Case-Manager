@@ -14,15 +14,28 @@ export class DataHandleTableComponent {
   fileContent = this.csvHandlerService.csvData();
   possibleDelimiters = this.csvHandlerService.possibleDelimiters();
   possibleLineBreaks = this.csvHandlerService.possibleLineBreaks();
-  selectedDelimiter: string = '';
-  selectedLineBreak: string = '';
+  selectedDelimiter: string = ',';
+  selectedLineBreak: string = '\n';
   parsedData: string[][] = [];
   selectedRows: number[] = [];
   newColumnName: string = '';
-  headers = ["testId", "parentId", "Test Type", "Test Title", "Test Priority", "Scope", "Step"]
+  headers = [
+    'testId',
+    'parentId',
+    'Test Type',
+    'Test Title',
+    'Test Priority',
+    'Scope',
+    'Step',
+  ];
+
+  ngOnInit() {
+    this.parseCSV()
+  }
 
   parseCSV(): void {
-    if (!this.selectedDelimiter || !this.selectedLineBreak || !this.fileContent ) return;
+    if (!this.selectedDelimiter || !this.selectedLineBreak || !this.fileContent)
+      return;
 
     const rows = this.fileContent.split(this.selectedLineBreak);
     this.parsedData = rows.map((row) => row.split(this.selectedDelimiter));
@@ -37,5 +50,4 @@ export class DataHandleTableComponent {
       this.selectedRows.splice(index, 1);
     }
   }
-
 }
