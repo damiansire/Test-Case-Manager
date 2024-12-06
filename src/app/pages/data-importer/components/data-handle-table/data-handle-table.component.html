@@ -1,4 +1,5 @@
 <div class="container mx-auto p-4 space-y-4">
+  @if (!csvHandlerService.selectedDelimiter() || !csvHandlerService.selectedLineBreak()) {
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
       <label
@@ -9,7 +10,7 @@
       </label>
       <select
         id="delimiter"
-        [(ngModel)]="selectedDelimiter"
+        [(ngModel)]="csvHandlerService.selectedDelimiter"
         class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
       >
         <option value="">Selecciona un separador</option>
@@ -29,7 +30,7 @@
       </label>
       <select
         id="linebreak"
-        [(ngModel)]="selectedLineBreak"
+        [(ngModel)]="csvHandlerService.selectedLineBreak"
         class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
       >
         <option value="">Selecciona un salto de línea</option>
@@ -45,12 +46,13 @@
   </div>
 
   <button
-    (click)="parseCSV()"
+    (click)="csvHandlerService.parseCSV()"
     class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
   >
     Convertir a tabla
   </button>
-  @if ( parsedData.length > 0) {
+}
+  @if ( csvHandlerService.parsedData()?.length != 0) {
   <ng-container>
     <div class="mt-8 flex flex-col">
       <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -75,11 +77,11 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                @for (row of parsedData; track $index) {
+                @for (row of csvHandlerService.parsedData(); track $index) {
                 <tr
-                  [class.bg-blue-50]="selectedRows.includes($index + 1)"
+                  [class.bg-blue-50]="csvHandlerService.selectedRows().includes($index + 1)"
                   (click)="toggleRowSelection($index + 1)"
-                  [class.bg-blue-50]="selectedRows.includes($index + 1)"
+                  [class.bg-blue-50]="csvHandlerService.selectedRows().includes($index + 1)"
                 >
                   @for (cell of row; track $index) {
                   <td

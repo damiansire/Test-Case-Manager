@@ -10,14 +10,9 @@ import { CsvHandlerService } from '../../../../services/csv-handler';
 })
 export class DataHandleTableComponent {
   csvHandlerService = inject(CsvHandlerService);
-
   fileContent = this.csvHandlerService.csvData();
   possibleDelimiters = this.csvHandlerService.possibleDelimiters();
   possibleLineBreaks = this.csvHandlerService.possibleLineBreaks();
-  selectedDelimiter = signal(',');
-  selectedLineBreak = signal('\n');
-  parsedData: string[][] = [];
-  selectedRows: number[] = [];
   newColumnName: string = '';
   headers = [
     'testId',
@@ -30,24 +25,10 @@ export class DataHandleTableComponent {
   ];
 
   ngOnInit() {
-    this.parseCSV()
-  }
-
-  parseCSV(): void {
-    if (!this.selectedDelimiter() || !this.selectedLineBreak || !this.fileContent)
-      return;
-
-    const rows = this.fileContent.split(this.selectedLineBreak());
-    this.parsedData = rows.map((row) => row.split(this.selectedDelimiter()));
-    this.selectedRows = [];
+    this.csvHandlerService.parseCSV()
   }
 
   toggleRowSelection(rowIndex: number): void {
-    const index = this.selectedRows.indexOf(rowIndex);
-    if (index === -1) {
-      this.selectedRows.push(rowIndex);
-    } else {
-      this.selectedRows.splice(index, 1);
-    }
+    this.csvHandlerService.toggleRowSelection(rowIndex)
   }
 }
